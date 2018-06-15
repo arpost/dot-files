@@ -38,8 +38,8 @@
   (setq projectile-completion-system 'helm)
   (helm-projectile-on))
 
-(require 'flycheck)
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(when (boundp 'global-flycheck-mode)
+  (add-hook 'after-init-hook #'global-flycheck-mode))
 
  (when (boundp 'global-company-mode)
    (add-hook 'js-mode-hook
@@ -51,6 +51,14 @@
 (when window-system
   (when (featurep 'aquamacs)
     (setq default-frame-alist nil))
-  (load-theme 'solarized-dark t))
+  (when (require 'solarized-theme)
+    (load-theme 'solarized-dark t)))
 
 
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+
+(add-hook 'clojure-mode-hook 'cider-mode)
+(add-hook 'clojure-mode-hook #'paredit-mode)
+(add-hook 'cider-mode-hook #'eldoc-mode)
